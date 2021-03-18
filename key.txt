@@ -1,0 +1,3 @@
+data.R -- pulling up the murders dataset
+pop-size-death.R -- does population size scale with gun deaths? 
+rate-death.R -- comparing states by gun death rate 

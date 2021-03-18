@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-When we started talking about Gun Murders in edX I had a very "oh no" moment. Texas, the state of my heart, has the reputation of being a gun-slinging-bull-riding-cow-boy rodeo all day er'y day. It might be a stereotype that Texans love their state the best, but it's a true one, and I wasn't excited for some Massachusetts Yankee to come in and wag their finger at us, Harvard professor or not. As it turns out, Texas did not rank the highest on gun murders across the 50 states, but the South does have a higher rate of death by gun than any other region of the country. So, maybe the stereotype isn't entirely unfounded.
+When we started talking about Gun Murders in edX I had a very "oh no" moment. Texas, the state of my heart, has the reputation of being a bull-riding-gun-slinging-cow-boy-yodeling rodeo all day er'y day. It might be a stereotype that Texans love their state the best, but it's a true one, and I wasn't excited for some Massachusetts Yankee to come in and wag their finger at us, Harvard professor or not. As it turns out, Texas did not rank the highest on gun murders across the 50 states, but the South does have a higher rate of death by gun than any other region of the country. So, maybe the stereotype isn't entirely unfounded.
 
 Disclaimer: This is a practice report. It does not seek to investigate why the murder rates differ between states. In addition, the findings below are based on data from 2010 on US Gun Murder Rates found on Wikipedia (<https://en.wikipedia.org/wiki/Murder_in_the_United_States_by_state>) and are not indicative of what gun murder rates are today, more than a decade later.
 
@@ -26,7 +26,7 @@ head(murders)
 
 ## State Population and Gun Deaths
 
-At first I wanted to compare state sizes with gun deaths, but I quickly realized this data table does not include land mass when factoring in the number of deaths so it's probably related to population size. Occam's Razor would state that states with the largest populations probably have the most gun deaths, and the smallest states probably have the least. So I tested that with the code below. 
+At first I wanted to compare state sizes with gun deaths, but I quickly realized this data table does not include land mass when factoring in the number of deaths so it's probably related to population size. Occam's Razor would state that states with the largest populations probably have the most gun deaths, and the smallest states probably have the least. So I tested that with the code below.
 
 ```{r plot-pop-and-murder, echo = FALSE}
 murders %>% 
@@ -35,20 +35,24 @@ murders %>%
   geom_histogram(stat = "identity", fill = "skyblue") + 
   ggtitle("State Gun Murder Totals") + 
   coord_flip()
+
 ```
-Here, states abbreviations are ordered by population size with the bar length indicating total number of deaths. I confirm my observations below. 
+
+Here, states abbreviations are ordered by population size with the bar length indicating total number of deaths. I confirm my observations below.
 
 ```{r largepop, echo=FALSE}
 murders$state[which.max(murders$population)]   
 which.max(murders$population) == which.max(murders$total)
 ```
-California has the largest population and the most gun deaths by total. 
+
+California has the largest population and the most gun deaths by total.
 
 ```{r smallpop, echo=FALSE}
 murders$state[which.min(murders$population)]
 which.min(murders$population) == which.min(murders$total)
 ```
-Wyoming has the smallest population, but it does not have the least gun deaths by total. So there must be something else at work. 
+
+Wyoming has the smallest population, but it does not have the least gun deaths by total. So there must be something else at work.
 
 Because states all have different population sizes, it would be more fair to compare murder rates rather than murder totals. With all the states on equal footing, I determined which states were above average in terms of gun deaths.
 
@@ -64,4 +68,5 @@ murders %>%
   geom_hline(yintercept = ave_deaths, linetype = "dashed", color = "red", size = 1.5)
 murders %>% filter(rate >= ave_deaths) %>% select(state)
 ```
-Shame on these 24 states in particular! 
+
+Shame on these 24 states in particular!
