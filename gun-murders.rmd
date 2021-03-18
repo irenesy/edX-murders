@@ -15,6 +15,10 @@ When we started talking about Gun Murders in edX I had a very "oh no" moment. Te
 
 Disclaimer: This is a practice report. It does not seek to investigate why the murder rates differ between states. In addition, the findings below are based on data from 2010 on US Gun Murder Rates found on Wikipedia (<https://en.wikipedia.org/wiki/Murder_in_the_United_States_by_state>) and are not indicative of what gun murder rates are today, more than a decade later.
 
+## Focus Question
+
+Does Texas actually live up to its reputation as a dangerous gun-toting cowboy state?
+
 I used the following libraries and pre-wrangled data:
 
 ```{r libs, message = FALSE}
@@ -22,10 +26,6 @@ library(dslabs)
 library(tidyverse)
 data(murders)
 ```
-
-##Focus Question
-
-Does Texas actually live up to its reputation as a dangerous gun-toting cowboy state?
 
 ## Barplot of State Population and Gun Murders
 
@@ -43,23 +43,22 @@ murders %>%
 
 Here, state abbreviations are ordered by population size with the bar length indicating total number of deaths. California has the largest population and the most gun deaths. Though Wyoming doesn't have the lowest gun deaths, it does have the smallest population. I confirm my observations below.
 
-```{r largepop, echo=FALSE}
+```{r largepop, echo=TRUE}
 murders$state[which.max(murders$population)]   
 which.max(murders$population) == which.max(murders$total)
 ```
 
 California has the largest population and the most gun deaths by total.
 
-```{r smallpop, echo=FALSE}
+
+```{r smallpop, echo=TRUE}
 murders$state[which.min(murders$population)]
 which.min(murders$population) == which.min(murders$total)
 ```
 
-Wyoming has the smallest population, but it does not have the least gun deaths by total.
+Wyoming has the smallest population, but it does not have the least gun deaths by total. It's not just population size that contributes to gun deaths. There must be something else at work.
 
-So it's not just population size that contributes to gun deaths. There must be something else at work.
-
-##Barplot of State Rates of Gun Murder
+## Barplot of State Rates of Gun Murder
 
 Because states all have different population sizes, it would be more fair to compare murder rates rather than murder totals. With all the states on equal footing, I determined which states were above average in terms of gun deaths.
 
@@ -104,7 +103,7 @@ murders %>% filter(state == "District of Columbia")
 ```
 TIL: The District of Columbia is in the south. Well, you say, DC is technically not a state. So, what if we don't include it? 
 
-```{r}
+```{r everyone-excludes-DC, echo = FALSE}
 murders %>%  #boxplot again without DC 
   filter(!state == "District of Columbia") %>% 
   group_by(region) %>% 
@@ -115,7 +114,7 @@ murders %>%  #boxplot again without DC
   geom_hline(yintercept = ave_deaths, color = "red")
 ```
 
-If we throw out the outlier the boxplots don't change by much. In fact, we can see even clearer that the South very clearly has higher rates of gun murder than any other region in the United States. 
+If we throw out the outlier the boxplots don't change by much. In fact, we can see even more clearly that the South has higher rates of gun murder than any other region in the United States. 
 
 ## Conclusions
 
@@ -125,7 +124,7 @@ I am relieved that the rate of gun deaths aren't the worst in Texas, but it's st
 
 Ultimately, I've discovered that the real cowboy state is Washington DC, which has the highest rates of gun murders by far. You know, I've always associated cowboys with a special kind of lawlessness, but DC is where laws literally get made. Is that? The joke? Is this why we were assigned this dataset Mr. Professor Man?
 
-##Further Research
+## Further Research
 
 Why does DC have the highest gun murder rates? And, as I mentioned earlier in the report, this data is from more than a decade ago. How have patterns changed in the years since? Have laws changed in states since? 
 
