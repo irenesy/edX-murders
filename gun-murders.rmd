@@ -23,7 +23,9 @@ library(tidyverse)
 data(murders)
 ```
 
-## Data Distribution
+##Focus Question
+
+Does Texas actually live up to its reputation as a dangerous gun-toting cowboy state? 
 
 ## State Population and Gun Deaths
 
@@ -39,7 +41,7 @@ murders %>%
 
 ```
 
-Here, states abbreviations are ordered by population size with the bar length indicating total number of deaths. California has the largest population and the most gun deaths. Though Wyoming doesn't have the lowest gun deaths, it does have the smallest population. I confirm my observations below.
+Here, state abbreviations are ordered by population size with the bar length indicating total number of deaths. California has the largest population and the most gun deaths. Though Wyoming doesn't have the lowest gun deaths, it does have the smallest population. I confirm my observations below.
 
 ```{r largepop, echo=FALSE}
 murders$state[which.max(murders$population)]   
@@ -71,7 +73,7 @@ murders %>%
   geom_hline(yintercept = ave_deaths, linetype = "dashed", color = "red", size = 1.5)
 ```
 
-Based on the graph, we can see the District of Columbia has highest and Vermont has the lowest rate of gun deaths. It also looks like approximately half of the states have rates of gun murder above the national average. The 24 states that have above average
+Based on the graph, we can see the District of Columbia has highest and Vermont has the lowest rate of gun deaths. It also looks like approximately half of the states have rates of gun murder above the national average. The 24 states that have above average rates of gun murders are shown below in order from highest to lowest.
 
 ```{r rank-above-ave-deaths, echo = FALSE}
 murders %>% 
@@ -79,4 +81,22 @@ murders %>%
   mutate(rank = rank(-rate)) %>% select(rank, state) %>% arrange(rank)
 ```
 
-I was surprised Louisiana, Texas's neighboring state
+I was surprised Louisiana, Texas's neighboring state ranked as high as it did, so I wanted to see if maybe there were trends across regions. Were there some regions with higher gun murder rates than others?
+
+```{r boxplot-no-label, echo = F}
+murders %>%  #generating boxplots
+  group_by(region) %>% 
+  ggplot(aes(region, rate, fill = region)) + 
+  geom_hline(yintercept = ave_deaths, color = "red") +
+  geom_boxplot() + 
+  geom_point() + 
+  ggtitle("Boxplot Regions Gun Murders")
+```
+
+Compared to the other regions, the South has the highest rates of gun murder; the entirety of its IQR sits above the national average. However, the outlier surprised me. Which state was that? Wasn't the state with the highest murder rate DC? 
+
+```{r where-is-DC, echo = FALSE}
+murders %>% filter(state == "District of Columbia") #confirm DC region listed as "South"
+
+```
+
