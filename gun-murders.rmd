@@ -25,9 +25,9 @@ data(murders)
 
 ##Focus Question
 
-Does Texas actually live up to its reputation as a dangerous gun-toting cowboy state? 
+Does Texas actually live up to its reputation as a dangerous gun-toting cowboy state?
 
-## State Population and Gun Deaths
+## Barplot of State Population and Gun Murders
 
 At first I wanted to compare state sizes with gun deaths, but I quickly realized this data table does not include land mass when factoring in the number of deaths so it's probably related to population size. Occam's Razor would state that states with the largest populations probably have the most gun deaths, and the smallest states probably have the least. So I tested that with the code below.
 
@@ -59,6 +59,8 @@ Wyoming has the smallest population, but it does not have the least gun deaths b
 
 So it's not just population size that contributes to gun deaths. There must be something else at work.
 
+##Barplot of State Rates of Gun Murder
+
 Because states all have different population sizes, it would be more fair to compare murder rates rather than murder totals. With all the states on equal footing, I determined which states were above average in terms of gun deaths.
 
 ```{r rate-vs-gun-deaths, echo = F}
@@ -81,6 +83,8 @@ murders %>%
   mutate(rank = rank(-rate)) %>% select(rank, state) %>% arrange(rank)
 ```
 
+## Boxplot of Regional Gun Murder Rates
+
 I was surprised Louisiana, Texas's neighboring state ranked as high as it did, so I wanted to see if maybe there were trends across regions. Were there some regions with higher gun murder rates than others?
 
 ```{r boxplot-no-label, echo = F}
@@ -93,10 +97,36 @@ murders %>%  #generating boxplots
   ggtitle("Boxplot Regions Gun Murders")
 ```
 
-Compared to the other regions, the South has the highest rates of gun murder; the entirety of its IQR sits above the national average. However, the outlier surprised me. Which state was that? Wasn't the state with the highest murder rate DC? 
+Compared to the other regions, the South has the highest rates of gun murder; the entirety of its IQR sits above the national average. However, the outlier surprised me. Which state was that? Wasn't the state with the highest murder rate DC?
 
 ```{r where-is-DC, echo = FALSE}
-murders %>% filter(state == "District of Columbia") #confirm DC region listed as "South"
+murders %>% filter(state == "District of Columbia")
+```
+TIL: The District of Columbia is in the south. Well, you say, DC is technically not a state. So, what if we don't include it? 
 
+```{r}
+murders %>%  #boxplot again without DC 
+  filter(!state == "District of Columbia") %>% 
+  group_by(region) %>% 
+  ggplot(aes(region, rate, fill = region)) + 
+  geom_boxplot() + 
+  geom_point() + 
+  ggtitle("Boxplot Regions Gun Murders w/o DC") + 
+  geom_hline(yintercept = ave_deaths, color = "red")
 ```
 
+If we throw out the outlier the boxplots don't change by much. In fact, we can see even clearer that the South very clearly has higher rates of gun murder than any other region in the United States. 
+
+## Conclusions
+
+So, does Texas live up to its dangerous reputation with guns? Though larger states like Texas do record more gun deaths, they don't necessarily have higher rates of gun murders when the size of the population is taken into account. About half of the states in the country (including Texas) have higher-than-average gun murders. And when organizing states by region, we can see that the South has the highest rate of gun murder.  
+
+I am relieved that the rate of gun deaths aren't the worst in Texas, but it's still higher than it would be in any other region of the country, so it isn't much to brag about. 
+
+Ultimately, I've discovered that the real cowboy state is Washington DC, which has the highest rates of gun murders by far. You know, I've always associated cowboys with a special kind of lawlessness, but DC is where laws literally get made. Is that? The joke? Is this why we were assigned this dataset Mr. Professor Man?
+
+##Further Research
+
+Why does DC have the highest gun murder rates? And, as I mentioned earlier in the report, this data is from more than a decade ago. How have patterns changed in the years since? Have laws changed in states since? 
+
+This report doesn't take into account migration patterns, urban density, socioeconomic status, who is getting killed, who is doing the killing, current events, and laws and legislature, things which all vary considerably from state to state and year to year. Something to look into in the future. 
