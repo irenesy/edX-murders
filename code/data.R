@@ -1,4 +1,8 @@
+install.packages("ggpubr")
+install.packages("dslabs")
+install.packages("tidyverse")
 library(dslabs)
 library(tidyverse)
+library(ggpubr)
 data(murders)
 head(murders)

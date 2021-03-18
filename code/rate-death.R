@@ -1,4 +1,5 @@
 murders <- murders %>% mutate(rate = total/population*10000)   #add rate column
+head(murders)
 
 ave_deaths <- mean(murders$rate) 
 
@@ -10,4 +11,7 @@ murders %>%    #bargraph states in order of gun murder death rates with national
   coord_flip() +
   geom_hline(yintercept = ave_deaths, linetype = "dashed", color = "red", size = 1.5)
 
-murders %>% filter(rate >= ave_deaths) %>% select(state) %>% add(rank())
+murders %>% 
+  filter(rate >= ave_deaths) %>% 
+  mutate(rank = rank(-rate)) %>% select(rank, state) %>% arrange(rank)
+
